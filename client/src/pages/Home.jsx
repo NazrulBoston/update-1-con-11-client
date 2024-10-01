@@ -1,9 +1,11 @@
+import Carasoul from "../components/Carousal";
 
 
 const Home = () => {
     return (
         <div>
-            <h1>This is Home</h1>
+        
+            <Carasoul></Carasoul>
      
         </div>
     );

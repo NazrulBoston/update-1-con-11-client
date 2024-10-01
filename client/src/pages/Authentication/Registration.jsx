@@ -27,14 +27,13 @@ const Registration = () => {
             setUser({ ...user, photoURL: photo, displayName: name })
             navigate("/")
             toast.success("Successfully create an User")
-            form.reset()
+
 
         } catch (err) {
             console.log(err)
             toast.error(err?.message)
         }
-
-
+        form.reset()
 
     }
 

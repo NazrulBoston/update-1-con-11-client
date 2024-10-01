@@ -8,24 +8,44 @@ import toast from "react-hot-toast"
 
 const Login = () => {
     const navigate = useNavigate();
-    const { signIn,signInWithGoogle } = useContext(AuthContext);
+    const { user, setUser, signIn, signInWithGoogle } = useContext(AuthContext);
+
+    // Email and Password Sign In
+    const handleSignIn = async (e) => {
+        e.preventDefault();
+        const form = e.target;
+        const email = form.email.value;
+        const password = form.password.value;
+        console.log({email, password})
+        try {
+           const result = await signIn(email, password)
+           console.log(result)
+           toast.success('Successfully login')
+        } catch (error) {
+            console.log(error)
+            toast.error("Invalid credential try again!")    
+        }
+        form.reset()
+    }
+
+
 
     //Google Sign In
-    const handleGoogleSign = async() => {
+    const handleGoogleSign = async () => {
         try {
             await signInWithGoogle();
             toast.success('Sign In Successfully')
             navigate("/")
         } catch (error) {
-           console.log(error) 
-           toast.error(error.message)
+            console.log(error)
+            toast.error(error.message)
         }
 
     }
 
 
 
-    // Email and Password Sign In
+
     return (
         <div className='flex justify-center items-center min-h-[calc(100vh-306px)] my-12 gap-9'>
             <div className='flex w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-lg lg:max-w-4xl '>
@@ -85,7 +105,7 @@ const Login = () => {
 
                         <span className='w-1/5 border-b dark:border-gray-400 lg:w-1/4'></span>
                     </div>
-                    <form>
+                    <form onSubmit={handleSignIn}>
                         <div className='mt-4'>
                             <label
                                 className='block mb-2 text-sm font-medium text-gray-600 '
