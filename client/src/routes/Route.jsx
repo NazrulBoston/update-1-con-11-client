@@ -6,12 +6,16 @@ import Registration from "../pages/Authentication/Registration";
 import About from "../pages/About";
 import Contact from "../pages/Contact";
 import JobDetails from "../pages/JobDetails";
+import AddJob from "../pages/AddJob";
+import ErrorPage from "../pages/ErrorPage";
+import MyPostedJobs from "../pages/MyPostedJobs";
 
 
 const router = createBrowserRouter([
     {
         path: "/",
         element: <Main></Main>,
+        errorElement: <ErrorPage></ErrorPage>,
         children: [
             {
                 index: true,
@@ -41,6 +45,14 @@ const router = createBrowserRouter([
                 path: "/contact",
                 element: <Contact></Contact>,
             },
+            {
+                path:'/add-job',
+                element:<AddJob></AddJob>
+            },
+            {
+                path:'/my-posted-jobs',
+                element:<MyPostedJobs></MyPostedJobs>
+            }
 
         ]
     }
