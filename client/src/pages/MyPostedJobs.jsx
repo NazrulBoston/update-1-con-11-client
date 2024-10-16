@@ -27,7 +27,7 @@ const MyPostedJobs = () => {
       console.log(data)
       toast.success('Delete Successful')
 
-      //refresh ui (aikhane filter na kare getData() ke call kara hoese kenona amara upore get data function die data fetch karsi)
+      //refresh ui (aikhane filter na kare getData() ke call kara hoese kenona amara upore get data function die data fetch karsi. r ar jonnoi get data k useEffect ar function ar vitore call kara hoese)
       getData()
     } catch (err) {
       console.log(err.message)
