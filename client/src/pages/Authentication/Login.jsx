@@ -1,14 +1,28 @@
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import logImg from '../../assets/images/login.jpg'
 import logo from '../../assets/images/logo.png'
-import { useContext } from "react"
+import { useContext, useEffect } from "react"
 import { AuthContext } from "../../provider/AuthProvider"
 import toast from "react-hot-toast"
 
 
 const Login = () => {
     const navigate = useNavigate();
-    const { user, setUser, signIn, signInWithGoogle } = useContext(AuthContext);
+    const location = useLocation()
+    const { user,loading, setUser, signIn, signInWithGoogle } = useContext(AuthContext);
+    const from = location.state
+
+
+    // if user sign in you can not go to login page
+    useEffect(()=> {
+        if(user){
+            navigate('/')
+        }
+    }, [user, loading])
+
+    if(user || loading) return;
+
+
 
     // Email and Password Sign In
     const handleSignIn = async (e) => {
@@ -16,14 +30,14 @@ const Login = () => {
         const form = e.target;
         const email = form.email.value;
         const password = form.password.value;
-        console.log({email, password})
+        console.log({ email, password })
         try {
-           const result = await signIn(email, password)
-           console.log(result)
-           toast.success('Successfully login')
+            const result = await signIn(email, password)
+            console.log(result)
+            toast.success('Successfully login')
         } catch (error) {
             console.log(error)
-            toast.error("Invalid credential try again!")    
+            toast.error("Invalid credential try again!")
         }
         form.reset()
     }
@@ -35,7 +49,7 @@ const Login = () => {
         try {
             await signInWithGoogle();
             toast.success('Sign In Successfully')
-            navigate("/")
+            navigate(from, { replace: true })
         } catch (error) {
             console.log(error)
             toast.error(error.message)
@@ -43,9 +57,7 @@ const Login = () => {
 
     }
 
-
-
-
+    
     return (
         <div className='flex justify-center items-center min-h-[calc(100vh-306px)] my-12 gap-9'>
             <div className='flex w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-lg lg:max-w-4xl '>
