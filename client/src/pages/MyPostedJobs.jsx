@@ -1,11 +1,13 @@
-import { useContext, useEffect, useState } from 'react'
-import { AuthContext } from '../provider/AuthProvider'
-import axios from 'axios'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import toast from 'react-hot-toast'
+import useAxiosSecure from '../hooks/useAxiosSecure'
+import useAuth from '../hooks/useAuth'
 
 const MyPostedJobs = () => {
-  const { user } = useContext(AuthContext)
+  const axiosSecure = useAxiosSecure()
+
+  const { user } = useAuth()
   const [jobs, setJobs] = useState([])
 
   useEffect(() => {
@@ -13,16 +15,14 @@ const MyPostedJobs = () => {
   }, [user])
 
   const getData = async () => {
-    const { data } = await axios(
-      `${import.meta.env.VITE_API_URL}/jobs/${user?.email}`
+    const { data } = await axiosSecure(`/jobs/${user?.email}`, { withCredentials: true }
     )
     setJobs(data)
   }
 
   const handleDelete = async id => {
     try {
-      const { data } = await axios.delete(
-        `${import.meta.env.VITE_API_URL}/job/${id}`
+      const { data } = await axiosSecure.delete(`/job/${id}`
       )
       console.log(data)
       toast.success('Delete Successful')
@@ -111,16 +111,13 @@ const MyPostedJobs = () => {
                       <td className='px-4 py-4 text-sm whitespace-nowrap'>
                         <div className='flex items-center gap-x-2'>
                           <p
-                            className={`px-3 py-1 ${
-                              job.category === 'Web Development' &&
+                            className={`px-3 py-1 ${job.category === 'Web Development' &&
                               'text-blue-500 bg-blue-100/60'
-                            } ${
-                              job.category === 'Graphics Design' &&
+                              } ${job.category === 'Graphics Design' &&
                               'text-emerald-500 bg-emerald-100/60'
-                            } ${
-                              job.category === 'Digital Marketing' &&
+                              } ${job.category === 'Digital Marketing' &&
                               'text-pink-500 bg-pink-100/60'
-                            } text-xs  rounded-full`}
+                              } text-xs  rounded-full`}
                           >
                             {job.category}
                           </p>

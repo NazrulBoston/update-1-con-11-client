@@ -26,6 +26,11 @@ const Navbar = () => {
                     <li>
                         <NavLink className={({ isActive }) =>
                             isActive ? "btn btn-sm btn-success" : "btn btn-sm btn-ghost"
+                        } to='/jobs'>AllJobs</NavLink>
+                    </li>
+                    <li>
+                        <NavLink className={({ isActive }) =>
+                            isActive ? "btn btn-sm btn-success" : "btn btn-sm btn-ghost"
                         } to='/about'> About
                         </NavLink>
                     </li>

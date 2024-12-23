@@ -11,6 +11,7 @@ import {
   updateProfile,
 } from 'firebase/auth'
 import { app } from '../firebase/firebase.config'
+import axios from 'axios'
 
 export const AuthContext = createContext(null)
 const auth = getAuth(app)
@@ -37,6 +38,8 @@ const AuthProvider = ({ children }) => {
 
   const logOut = async () => {
     setLoading(true)
+    const {data} = axios(`${import.meta.env.VITE_API_URL}/logout`, { withCredentials: true, })
+    console.log(data)
     return signOut(auth)
   }
 
@@ -51,7 +54,7 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, currentUser => {
       setUser(currentUser)
-      console.log('CurrentUser-->', currentUser)
+      // console.log('CurrentUser-->', currentUser)
       setLoading(false)
     })
     return () => {

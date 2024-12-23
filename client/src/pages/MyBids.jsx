@@ -1,26 +1,26 @@
-import axios from "axios"
-import { useContext, useEffect, useState } from "react"
-import { AuthContext } from "../provider/AuthProvider"
+
+import { useEffect, useState } from "react"
+import useAuth from "../hooks/useAuth"
+import useAxiosSecure from "../hooks/useAxiosSecure"
 
 const MyBids = () => {
   const [bids, setBids] = useState([])
-  const { user } = useContext(AuthContext)
+  const { user } = useAuth()
+  const axiosSecure = useAxiosSecure()
 
   useEffect(() => {
     getData()
   }, [user])
 
   const getData = async () => {
-    const { data } = await axios(
-      `${import.meta.env.VITE_API_URL}/my-bids/${user?.email}`
+    const { data } = await axiosSecure(`/my-bids/${user?.email}`
     )
     setBids(data)
   }
   //handleStatus
   const handleStatus =  async (id, status) => {
     console.log(id, status)
-    const {data} = await axios.patch(
-      `${import.meta.env.VITE_API_URL}/bid/${id}`,
+    const {data} = await axiosSecure.patch(`/bid/${id}`,
       { status}
     )
     console.log(data)
@@ -142,7 +142,8 @@ const MyBids = () => {
                       <td className='px-4 py-4 text-sm whitespace-nowrap'>
                         {/* Complete Button */}
                         <button
-                          disabled={bid.status !== 'In Progress'}
+                          // disabled={bid.status === 'Complete' || "Rejected"} this line code or down below line same thing just different way code
+                          disabled={bid.status !== 'In Progress' && "Rejected"}
                           onClick={() => handleStatus(bid._id, 'Complete')}
                           title='Mark Complete'
                           className='text-gray-500 transition-colors duration-200   hover:text-red-500 focus:outline-none disabled:cursor-not-allowed'
